@@ -1,0 +1,38 @@
+        Me.SuspendLayout()
+
+        ' Add each property of the SystemInformation class to the list box.
+        Dim t As Type = GetType(System.Windows.Forms.SystemInformation)
+        Dim pi As PropertyInfo() = t.GetProperties()
+        Dim i As Integer
+        For i = 0 To pi.Length - 1
+            Me.tbWorkDescription.Text = Nothing
+            If pi(i).Name = "PowerStatus" Then
+                ' Cycle and display the values of each property of the PowerStatus property.
+                Me.tbWorkDescription.Text += ControlChars.CrLf + "The value of the PowerStatus property is:"
+                Dim t1 As Type = GetType(System.Windows.Forms.PowerStatus)
+                Dim pi1 As PropertyInfo() = t1.GetProperties()
+                Dim i1 As Integer
+                For i1 = 0 To pi1.Length - 1
+                    Dim propval As Object = pi1(i).GetValue(SystemInformation.PowerStatus, Nothing)
+                    Me.tbWorkDescription.Text += ControlChars.CrLf + "    PowerStatus." + pi1(i1).Name + " is: " + propval.ToString()
+                Next i1
+            Else
+                ' Display the value of the selected property of the SystemInformation type.
+                Dim t2 As Type = GetType(System.Windows.Forms.SystemInformation)
+                Dim pi2 As PropertyInfo() = t2.GetProperties()
+                Dim prop As PropertyInfo = Nothing
+                Dim i2 As Integer
+                For i2 = 0 To pi2.Length - 1
+                    If pi2(i2).Name = pi(i).Name Then
+                        prop = pi2(i2)
+                        Exit For
+                    End If
+                Next i2
+                Dim propval As Object = prop.GetValue(Nothing, Nothing)
+                Me.tbWorkDescription.Text += ControlChars.CrLf + "The value of the " + pi(i).Name + " property is: " + propval.ToString()
+            End If
+
+　
+        Next i
+
+        Me.ResumeLayout(False)
